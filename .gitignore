@@ -1,0 +1,16 @@
+node_modules/**/*
+.expo/*
+npm-debug.*
+package-lock.json
+
+*.jks
+*.p12
+*.key
+*.mobileprovision
+.DS_Store
+
+
+
+
+CHANGELOG.md
+node_modules
