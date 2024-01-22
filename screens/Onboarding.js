@@ -32,8 +32,7 @@ export default class Onboarding extends React.Component {
                     color="white"
                     size={44}
                   >
-                    Now UI
-                    React Native
+                    Digisomo
                   </Text>
                 </Block>
               </Block>
@@ -60,16 +59,16 @@ export default class Onboarding extends React.Component {
                   size={16}
                   style={{ fontFamily: 'montserrat-regular' }}
                 >
-                  Coded by
+                  {/**Coded by*/}
                 </Text>
-                <Image
+                {/**<Image
                   source={Images.CreativeTimLogo}
                   style={{
                     height: 29,
                     width: 129,
                     marginLeft: theme.SIZES.BASE
                   }}
-                />
+                />**/}
               </Block>
 
               <Block
