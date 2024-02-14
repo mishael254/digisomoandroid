@@ -51,27 +51,43 @@ class Register extends React.Component {
       gender: this.state.gender,
       age: this.state.age,
       occupation: this.state.occupation,
-      // other automatic fieldsinclude other fields
+      // other automatic fields include other fields
     };
 
     // Save user data locally
     UserDataService.saveUserData(userData)
       .then(() => {
-        // Successfully saved to SQLite, now try to post data
-        return UserDataService.postUserData(userData);
-      })
-      .then(() => {
-        // Successfully posted to API
-        // Do any additional actions or navigation here
-        console.log('User data saved and posted successfully');
+        // Successfully saved to SQLite
+
+        // Check for network connection
+        NetInfo.fetch().then((state) => {
+          if (state.isConnected) {
+            // Network is available, perform post to API
+            return UserDataService.postUserData(userData)
+              .then(() => {
+                // Successfully posted to API
+                // Do any additional actions or navigation here
+                console.log('User data saved and posted successfully');
+                this.props.navigation.navigate('Home');
+              })
+              .catch((error) => {
+                // Handle errors during API post
+                console.error('Error during API post:', error);
+              });
+          } else {
+            // No internet connection, post will be attempted later
+            console.log('No internet connection');
+            // Navigate to Home screen even if post to API is not performed
+            this.props.navigation.navigate('Home');
+          }
+        });
       })
       .catch((error) => {
-        // Handle errors
-        console.error('Error:', error);
+        // Handle errors during local data storage
+        console.error('Error during local data storage:', error);
       });
-
-   
   };
+
   
   render() {
     return (
@@ -293,6 +309,7 @@ class Register extends React.Component {
                               style={{ fontFamily: 'montserrat-bold' }}
                               size={14}
                               color={nowTheme.COLORS.WHITE}
+                              onPress={this.handleRegister}
                             >
                               Get Started
                             </Text>

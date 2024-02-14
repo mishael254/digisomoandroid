@@ -1,32 +1,32 @@
-// services/UserDataService.js
-
-
 import NetInfo from '@react-native-community/netinfo';
 import * as SQLite from 'expo-sqlite';
+
 const db = SQLite.openDatabase({
   name: 'digisomo.db',
   location: 'default',
   createFromLocation: '~digisomo.db',
 });
-
+console.log('Database Path:', db._db._nativeModule.databasePath);
 const UserDataService = {
   saveUserData: (userData) => {
     return new Promise((resolve, reject) => {
+      const {
+        firstName,
+        lastName,
+        email,
+        phone,
+        gender,
+        age,
+        occupation,
+      } = userData;
+
       db.transaction(
         (tx) => {
           tx.executeSql(
-            'INSERT INTO users (firstName, lastName, email,phone, gender, age, occupation) VALUES (?, ?, ?, ?, ?, ?)',
-            [
-              userData.firstName,
-              userData.lastName,
-              userData.email,
-              userData.phone,
-              userData.gender,
-              userData.age,
-              userData.occupation,
-            ],
-            (tx, results) => {
-              if (results.rowsAffected > 0) {
+            'INSERT INTO users (firstName, lastName, email, phone, gender, age, occupation) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [firstName, lastName, email, phone, gender, age, occupation],
+            (_, { rowsAffected }) => {
+              if (rowsAffected > 0) {
                 console.log('User data inserted successfully');
                 resolve();
               } else {
@@ -34,7 +34,7 @@ const UserDataService = {
                 reject('Failed to insert user data');
               }
             },
-            (error) => {
+            (_, error) => {
               console.error('Error executing SQL statement:', error);
               reject(error);
             }
@@ -43,11 +43,13 @@ const UserDataService = {
         (error) => {
           console.error('Transaction error:', error);
           reject(error);
+        },
+        () => {
+          // Additional success callback if needed
         }
       );
     });
   },
-
   postUserData: (userData) => {
     return NetInfo.fetch().then((state) => {
       if (state.isConnected) {
