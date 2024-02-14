@@ -1,4 +1,5 @@
 import React from 'react';
+import UserDataService from '../services/UserDataService';
 import {
   StyleSheet,
   ImageBackground,
@@ -11,6 +12,7 @@ import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framewor
 
 import { Button, Icon, Input } from '../components';
 import { Images, nowTheme } from '../constants';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -19,19 +21,77 @@ const DismissKeyboard = ({ children }) => (
 );
 
 class Register extends React.Component {
+  state = {
+    firstName:'',
+    lastName:'',
+    email:'',
+    phone:'',
+    gender:'',
+    age:'',
+    occupation:'',
+    //this fields should be filled or detected automatically
+    /**category:'',
+    latitude:'',
+    longitude:'',
+    location:'',
+    project:'',
+    group:'',
+    language:''*/
+  }
+  handleInputChange = (key,value)=> {
+    this.setState({[key]:value});
+  }
+
+  handleRegister = () => {
+    const userData = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      email: this.state.email,
+      phone: this.state.phone,
+      gender: this.state.gender,
+      age: this.state.age,
+      occupation: this.state.occupation,
+      // other automatic fieldsinclude other fields
+    };
+
+    // Save user data locally
+    UserDataService.saveUserData(userData)
+      .then(() => {
+        // Successfully saved to SQLite, now try to post data
+        return UserDataService.postUserData(userData);
+      })
+      .then(() => {
+        // Successfully posted to API
+        // Do any additional actions or navigation here
+        console.log('User data saved and posted successfully');
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error('Error:', error);
+      });
+
+   
+  };
+  
   render() {
     return (
       <DismissKeyboard>
+        <ScrollView showsVerticalScrollIndicator={false}
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+        >
         <Block flex middle>
+          
           <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
           >
+            
             <Block flex middle>
               <Block style={styles.registerContainer}>
                 <Block flex space="evenly">
-                  <Block flex={0.4} middle style={styles.socialConnect}>
+                  <Block flex={0.3} middle style={styles.socialConnect}>
                     <Block flex={0.5} middle>
                       <Text
                         style={{
@@ -45,7 +105,7 @@ class Register extends React.Component {
                       </Text>
                     </Block>
 
-                    <Block flex={0.5} row middle space="between" style={{ marginBottom: 18 }}>
+                    <Block flex={0.5} row middle space="between" style={{ marginBottom: 15 }}>
                       <GaButton
                         round
                         onlyIcon
@@ -82,7 +142,7 @@ class Register extends React.Component {
                       />
                     </Block>
                   </Block>
-                  <Block flex={0.1} middle>
+                  <Block flex={0} middle>
                     <Text
                       style={{
                         fontFamily: 'montserrat-regular',
@@ -128,7 +188,7 @@ class Register extends React.Component {
                               }
                             />
                           </Block>
-                          <Block width={width * 0.8}>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
                             <Input
                               placeholder="Email"
                               style={styles.inputs}
@@ -138,6 +198,70 @@ class Register extends React.Component {
                                   color="#ADB5BD"
                                   name="email-852x"
                                   family="NowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Phone"
+                              style={styles.inputs}
+                              onChangeText={(text) => this.handleInputChange('phone', text)}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="phone"
+                                  family="IconNowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Gender"
+                              style={styles.inputs}
+                              onChangeText={(text) => this.handleInputChange('gender', text)}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="man"
+                                  family="IconNowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Age"
+                              style={styles.inputs}
+                              onChangeText={(text) => this.handleInputChange('age', text)}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="inbox"
+                                  family="IconNowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Occupation"
+                              style={styles.inputs}
+                              onChangeText={(text) => this.handleInputChange('occupation', text)}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="filter"
+                                  family="IconNowExtra"
                                   style={styles.inputIcons}
                                 />
                               }
@@ -182,12 +306,20 @@ class Register extends React.Component {
             </Block>
           </ImageBackground>
         </Block>
+        </ScrollView>
       </DismissKeyboard>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    height: height, // Ensure the ScrollView takes the full height
+  },
+  scrollViewContent: {
+    flexGrow: 1, // Allow content to expand within the ScrollView
+  },
   imageBackgroundContainer: {
     width: width,
     height: height,
@@ -201,7 +333,7 @@ const styles = StyleSheet.create({
   registerContainer: {
     marginTop: 55,
     width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
+    height: height < 812 ? height * 0.8 : height * 0.9,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
@@ -254,7 +386,7 @@ const styles = StyleSheet.create({
   createButton: {
     width: width * 0.5,
     marginTop: 25,
-    marginBottom: 40
+    marginBottom: 20
   },
   social: {
     width: theme.SIZES.BASE * 3.5,
