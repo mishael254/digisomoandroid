@@ -1,12 +1,11 @@
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo from "@react-native-community/netinfo";
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabase({
-  name: 'digisomo.db',
-  location: 'default',
-  createFromLocation: '~digisomo.db',
-});
-console.log('Database Path:', db._db._nativeModule.databasePath);
+const db = SQLite.openDatabase(
+  'digisomo.db',
+  
+);
+
 const UserDataService = {
   saveUserData: (userData) => {
     return new Promise((resolve, reject) => {
@@ -18,20 +17,33 @@ const UserDataService = {
         gender,
         age,
         occupation,
+        category,
+        latitude,
+        longitude,
+        location,
+        project,
+        group,
+        language,
       } = userData;
 
       db.transaction(
         (tx) => {
+           // Create 'members' table if it doesn't exist
+           tx.executeSql(
+            'CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, email TEXT, phone TEXT, gender TEXT, age TEXT, occupation TEXT, category TEXT, latitude TEXT, longitude TEXT, location TEXT, project TEXT, group TEXT, language TEXT)',
+            []
+          );
+            //insert data into 'members'
           tx.executeSql(
-            'INSERT INTO users (firstName, lastName, email, phone, gender, age, occupation) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [firstName, lastName, email, phone, gender, age, occupation],
+            'INSERT INTO members (firstName, lastName, email, phone, gender, age, occupation, category, latitude, longitude, location, project, group, language) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [firstName, lastName, email, phone, gender, age, occupation, category, latitude, longitude, location, project, group, language],
             (_, { rowsAffected }) => {
               if (rowsAffected > 0) {
-                console.log('User data inserted successfully');
+                console.log('member data inserted successfully');
                 resolve();
               } else {
-                console.error('Failed to insert user data');
-                reject('Failed to insert user data');
+                console.error('Failed to insert member data');
+                reject('Failed to insert member data');
               }
             },
             (_, error) => {

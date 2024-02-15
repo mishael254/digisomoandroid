@@ -1,4 +1,5 @@
 import React from 'react';
+import NetInfo from "@react-native-community/netinfo";
 import UserDataService from '../services/UserDataService';
 import {
   StyleSheet,
@@ -8,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard
 } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select'
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
 
 import { Button, Icon, Input } from '../components';
@@ -26,17 +28,17 @@ class Register extends React.Component {
     lastName:'',
     email:'',
     phone:'',
-    gender:'',
-    age:'',
+    gender:null,
+    age:null,
     occupation:'',
     //this fields should be filled or detected automatically
-    /**category:'',
+    category:null,
     latitude:'',
     longitude:'',
     location:'',
-    project:'',
-    group:'',
-    language:''*/
+    project:null,
+    group:null,
+    language:null,
   }
   handleInputChange = (key,value)=> {
     this.setState({[key]:value});
@@ -52,6 +54,10 @@ class Register extends React.Component {
       age: this.state.age,
       occupation: this.state.occupation,
       // other automatic fields include other fields
+      category: this.state.category, // New field
+      project: this.state.project,   // New field
+      group: this.state.group,       // New field
+      language: this.state.language   // New field
     };
 
     // Save user data locally
@@ -95,6 +101,7 @@ class Register extends React.Component {
         <ScrollView showsVerticalScrollIndicator={false}
           style={styles.scrollView}
           contentContainerStyle={styles.scrollViewContent}
+          keyboardShouldPersistTaps="handled"
         >
         <Block flex middle>
           
@@ -104,7 +111,7 @@ class Register extends React.Component {
             imageStyle={styles.imageBackground}
           >
             
-            <Block flex middle>
+            <Block flex middle >
               <Block style={styles.registerContainer}>
                 <Block flex space="evenly">
                   <Block flex={0.3} middle style={styles.socialConnect}>
@@ -235,36 +242,41 @@ class Register extends React.Component {
                               }
                             />
                           </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Gender"
-                              style={styles.inputs}
-                              onChangeText={(text) => this.handleInputChange('gender', text)}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="man"
-                                  family="IconNowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
+                          <Block width={width * 0.8} style={styles.inputContainer}>
+                            <RNPickerSelect
+                              placeholder={{
+                                label: 'Select gender...',
+                                value:null,
+                              }}
+                              onValueChange={(value) => this.handleInputChange('gender', value)}
+                                items={[
+                                    { label: 'Male', value: 'Male' },
+                                    { label: 'Female', value: 'Female' },
+                                    // ... (add more options based on your API response)
+                                  ]}
                             />
                           </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Age"
-                              style={styles.inputs}
-                              onChangeText={(text) => this.handleInputChange('age', text)}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="inbox"
-                                  family="IconNowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
+                          <Block width={width * 0.8} style={styles.inputContainer}>
+                            <RNPickerSelect
+                              placeholder={{
+                                label: 'Select Age...',
+                                value:null,
+                              }}
+                              onValueChange={(value) => this.handleInputChange('age', value)}
+                                items={[
+                                    { label: '12-below', value: '12-below' },
+                                    { label: '13-17', value: '13-17' },
+                                    { label: '18-22', value: '18-22' },
+                                    { label: '23-27', value: '23-27' },
+                                    { label: '28-32', value: '28-32' },
+                                    { label: '33-37', value: '33-37' },
+                                    { label: '38-42', value: '38-42' },
+                                    { label: '43-47', value: '43-47' },
+                                    { label: '48-52', value: '48-52' },
+                                    { label: '53-57', value: '53-57' },
+                                    { label: '58-above', value: '58-above' },
+                                    // ... (add more options based on your API response)
+                                  ]}
                             />
                           </Block>
                           <Block width={width * 0.8} style={{ marginBottom: 5 }}>
@@ -281,6 +293,111 @@ class Register extends React.Component {
                                   style={styles.inputIcons}
                                 />
                               }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={styles.inputContainer}>
+                            <RNPickerSelect
+                              placeholder={{
+                                label: 'Select Category...',
+                                value: null,
+                              }}
+                              onValueChange={(value) => this.handleInputChange('category', value)}
+                              items={[
+                                { label: 'Member', value: 'Member' },
+                                { label: 'Leader', value: 'Leader' },
+                                // ... (add more options based on your API response)
+                              ]}
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Latitude"
+                              style={styles.inputs}
+                              onChangeText={(text) => this.handleInputChange('latitude', text)}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="edit"
+                                  family="IconNowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Longitude"
+                              style={styles.inputs}
+                              onChangeText={(text) => this.handleInputChange('longitude', text)}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="edit"
+                                  family="IconNowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
+                            <Input
+                              placeholder="Location"
+                              style={styles.inputs}
+                              onChangeText={(text) => this.handleInputChange('location', text)}
+                              iconContent={
+                                <Icon
+                                  size={16}
+                                  color="#ADB5BD"
+                                  name="edit"
+                                  family="IconNowExtra"
+                                  style={styles.inputIcons}
+                                />
+                              }
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={styles.inputContainer}>
+                            <RNPickerSelect
+                              placeholder={{
+                                label: 'Select Project...',
+                                value: null,
+                              }}
+                              onValueChange={(value) => this.handleInputChange('project', value)}
+                              items={[
+                                { label: 'Ukulima True, Subukia', value: 'Ukulima True, Subukia' },
+                                { label: 'Piga Nduru, Nairobi', value: 'Piga Nduru, Nairobi' },
+                                // ... (add more options based on your API response)
+                              ]}
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={styles.inputContainer}>
+                            <RNPickerSelect
+                              placeholder={{
+                                label: 'Select Group...',
+                                value: null,
+                              }}
+                              onValueChange={(value) => this.handleInputChange('group', value)}
+                              items={[
+                                { label: '1', value: '1' },
+                                { label: '2', value: '2' },
+                                // ... (add more options based on your API response)
+                              ]}
+                            />
+                          </Block>
+                          <Block width={width * 0.8} style={styles.inputContainer}>
+                            <RNPickerSelect
+                              placeholder={{
+                                label: 'Select Language...',
+                                value: null,
+                              }}
+                              onValueChange={(value) => this.handleInputChange('language', value)}
+                              items={[
+                                { label: 'Kikuyu', value: 'Kikuyu' },
+                                { label: 'Kiswahili', value: 'Kiswahili' },
+                                { label: 'Kalenjin', value: 'Kalenjin' },
+                                // ... (add more options based on your API response)
+                              ]}
                             />
                           </Block>
                           <Block
@@ -333,14 +450,16 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     height: height, // Ensure the ScrollView takes the full height
+    flexGrow:1
   },
   scrollViewContent: {
     flexGrow: 1, // Allow content to expand within the ScrollView
   },
   imageBackgroundContainer: {
+    
     width: width,
     height: height,
-    padding: 0,
+    padding: 1,
     zIndex: 1
   },
   imageBackground: {
@@ -350,7 +469,7 @@ const styles = StyleSheet.create({
   registerContainer: {
     marginTop: 55,
     width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.9,
+    height: height < 1000 ? height * 1.0 : height * 1.0,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
@@ -361,7 +480,8 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOpacity: 0.1,
     elevation: 1,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    flexGrow:1
   },
   socialConnect: {
     backgroundColor: nowTheme.COLORS.WHITE
@@ -394,6 +514,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E3E3E3',
     borderRadius: 21.5
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: '#E3E3E3',
+    borderRadius: 21.5,
+    marginBottom: 5
   },
   passwordCheck: {
     paddingLeft: 2,
