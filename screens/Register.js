@@ -7,7 +7,9 @@ import {
   Dimensions,
   StatusBar,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select'
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
@@ -98,23 +100,27 @@ class Register extends React.Component {
   render() {
     return (
       <DismissKeyboard>
-        <ScrollView showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'android' ? 'padding' : undefined}>
+      <ScrollView showsVerticalScrollIndicator={false}
           style={styles.scrollView}
           contentContainerStyle={styles.scrollViewContent}
           keyboardShouldPersistTaps="handled"
         >
+      
+        
         <Block flex middle>
           
-          <ImageBackground
+        <ImageBackground
             source={Images.RegisterBackground}
             style={styles.imageBackgroundContainer}
             imageStyle={styles.imageBackground}
+            resizeMode="cover"
           >
             
             <Block flex middle >
               <Block style={styles.registerContainer}>
                 <Block flex space="evenly">
-                  <Block flex={0.3} middle style={styles.socialConnect}>
+                  <Block flex={0.5} middle style={styles.socialConnect}>
                     <Block flex={0.5} middle>
                       <Text
                         style={{
@@ -128,7 +134,7 @@ class Register extends React.Component {
                       </Text>
                     </Block>
 
-                    <Block flex={0.5} row middle space="between" style={{ marginBottom: 15 }}>
+                    <Block flex={0.9} row middle space="between" style={{ marginBottom: 15 }}>
                       <GaButton
                         round
                         onlyIcon
@@ -438,10 +444,11 @@ class Register extends React.Component {
                 </Block>
               </Block>
             </Block>
-          </ImageBackground>
+            </ImageBackground>
         </Block>
-        </ScrollView>
-      </DismissKeyboard>
+      </ScrollView>
+      </KeyboardAvoidingView>
+    </DismissKeyboard>
     );
   }
 }
@@ -449,27 +456,28 @@ class Register extends React.Component {
 const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
-    height: height, // Ensure the ScrollView takes the full height
-    flexGrow:1
+    
   },
   scrollViewContent: {
     flexGrow: 1, // Allow content to expand within the ScrollView
+    minHeight: height,
+    padding: theme.SIZES.BASE,
   },
   imageBackgroundContainer: {
-    
-    width: width,
-    height: height,
+    flex:1,
+    width:width,
+    height: null,
     padding: 1,
     zIndex: 1
   },
   imageBackground: {
-    width: width,
-    height: height
+    flex:1
+
   },
   registerContainer: {
     marginTop: 55,
     width: width * 0.9,
-    height: height < 1000 ? height * 1.0 : height * 1.0,
+    //height: height < 1000 ? height * 1.0 : height * 1.0,
     backgroundColor: nowTheme.COLORS.WHITE,
     borderRadius: 4,
     shadowColor: nowTheme.COLORS.BLACK,
