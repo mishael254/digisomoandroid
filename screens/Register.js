@@ -58,7 +58,7 @@ class Register extends React.Component {
       // other automatic fields include other fields
       category: this.state.category, // New field
       project: this.state.project,   // New field
-      group: this.state.group,       // New field
+      'group': this.state.group,       // New field
       language: this.state.language   // New field
     };
 
@@ -191,6 +191,8 @@ class Register extends React.Component {
                             <Input
                               placeholder="First Name"
                               style={styles.inputs}
+                              value={this.state.firstName}
+                              onChangeText={(text) => this.handleInputChange('firstName', text)}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -206,6 +208,8 @@ class Register extends React.Component {
                             <Input
                               placeholder="Last Name"
                               style={styles.inputs}
+                              value={this.state.lastName}
+                              onChangeText={(text) => this.handleInputChange('lastName', text)}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -221,6 +225,8 @@ class Register extends React.Component {
                             <Input
                               placeholder="Email"
                               style={styles.inputs}
+                              value={this.state.email}
+                              onChangeText={(text) => this.handleInputChange('email', text)}
                               iconContent={
                                 <Icon
                                   size={16}
@@ -236,6 +242,7 @@ class Register extends React.Component {
                             <Input
                               placeholder="Phone"
                               style={styles.inputs}
+                              value={this.state.phone}
                               onChangeText={(text) => this.handleInputChange('phone', text)}
                               iconContent={
                                 <Icon
@@ -289,6 +296,7 @@ class Register extends React.Component {
                             <Input
                               placeholder="Occupation"
                               style={styles.inputs}
+                              value={this.state.occupation}
                               onChangeText={(text) => this.handleInputChange('occupation', text)}
                               iconContent={
                                 <Icon
@@ -319,6 +327,7 @@ class Register extends React.Component {
                             <Input
                               placeholder="Latitude"
                               style={styles.inputs}
+                              value={this.state.latitude}
                               onChangeText={(text) => this.handleInputChange('latitude', text)}
                               iconContent={
                                 <Icon
@@ -335,6 +344,7 @@ class Register extends React.Component {
                             <Input
                               placeholder="Longitude"
                               style={styles.inputs}
+                              value={this.state.longitude}
                               onChangeText={(text) => this.handleInputChange('longitude', text)}
                               iconContent={
                                 <Icon
@@ -351,6 +361,7 @@ class Register extends React.Component {
                             <Input
                               placeholder="Location"
                               style={styles.inputs}
+                              value={this.state.location}
                               onChangeText={(text) => this.handleInputChange('location', text)}
                               iconContent={
                                 <Icon

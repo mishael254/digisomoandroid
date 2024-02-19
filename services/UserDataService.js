@@ -30,12 +30,12 @@ const UserDataService = {
         (tx) => {
            // Create 'members' table if it doesn't exist
            tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, email TEXT, phone TEXT, gender TEXT, age TEXT, occupation TEXT, category TEXT, latitude TEXT, longitude TEXT, location TEXT, project TEXT, group TEXT, language TEXT)',
+            'CREATE TABLE IF NOT EXISTS members (id INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, email TEXT, phone TEXT, gender TEXT, age TEXT, occupation TEXT, category TEXT, latitude TEXT, longitude TEXT, location TEXT, project TEXT, [group] TEXT, language TEXT)',
             []
           );
             //insert data into 'members'
           tx.executeSql(
-            'INSERT INTO members (firstName, lastName, email, phone, gender, age, occupation, category, latitude, longitude, location, project, group, language) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO members (firstName, lastName, email, phone, gender, age, occupation, category, latitude, longitude, location, project, [group], language) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [firstName, lastName, email, phone, gender, age, occupation, category, latitude, longitude, location, project, group, language],
             (_, { rowsAffected }) => {
               if (rowsAffected > 0) {
