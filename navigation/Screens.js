@@ -19,7 +19,7 @@ import SettingsScreen from '../screens/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import SplashScreen from '../screens/Splash';
 const { width } = Dimensions.get('screen');
 
 const Stack = createStackNavigator();
@@ -230,7 +230,7 @@ function AppStack(props) {
   );
 }
 
-export default function OnboardingStack(props) {
+export default function OnboardingStack({navigation}) {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -239,12 +239,14 @@ export default function OnboardingStack(props) {
       }}
     >
       <Stack.Screen
-        name="Onboarding"
-        component={Onboarding}
-        option={{
+        name="Splash"
+        options={{
           headerTransparent: true,
         }}
-      />
+      >
+        {props => <SplashScreen {...props} navigation={navigation} />} {/* Pass the navigation prop */}
+        </Stack.Screen>
+      <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="App" component={AppStack} />
     </Stack.Navigator>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, AppRegistry } from 'react-native';
+import { Image, AppRegistry, StatusBar, StyleSheet } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
@@ -8,7 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import UserDataService from './services/UserDataService';
 import Screens from './navigation/Screens';
 import { Images, articles, nowTheme } from './constants';
-
+import LottieView from 'lottie-react-native';
+import SplashScreen from './screens/Splash';
 // cache app images
 const assetImages = [
   Images.Onboarding,
@@ -40,7 +41,8 @@ function cacheImages(images) {
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
-    fontLoaded: false
+    fontLoaded: false,
+    showSplash: true
   };
 
   // async componentDidMount() {
@@ -66,7 +68,11 @@ export default class App extends React.Component {
         <NavigationContainer>
           <GalioProvider theme={nowTheme}>
             <Block flex>
-              <Screens />
+              {this.state.showSplash ? (
+                <SplashScreen onAnimationFinish={this._handleSplashAnimationFinish} navigation={this.props.navigation}/>
+              ) : (
+                <Screens />
+              )}
             </Block>
           </GalioProvider>
         </NavigationContainer>
@@ -95,4 +101,9 @@ export default class App extends React.Component {
       this.setState({ isLoadingComplete: true });
     }
   };
+  _handleSplashAnimationFinish = () => {
+    // Animation has finished, hide the splash screen
+    this.setState({ showSplash: false });
+  };
+  
 }
