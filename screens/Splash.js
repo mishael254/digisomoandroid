@@ -1,25 +1,32 @@
 import React, { useEffect } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
-const SplashScreen = ({ navigation }) => {
+import { useNavigation } from '@react-navigation/native';
+
+const SplashScreen = () => {
+  const navigation = useNavigation();
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       // Navigate to the main app screen after the splash screen
-      navigation.navigate('Onboarding');
+      if (navigation && navigation.navigate) {
+        navigation.navigate('Onboarding');
+      }
     }, 2000); // Adjust the duration as needed
-
     return () => clearTimeout(timeout);
   }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <LottieView
-        source={require('../assets/splash10.json')} // Use splash10.json instead of splash9.gif
-        autoPlay
-        loop={false}
-        onAnimationFinish={() => navigation.navigate('Onboarding')}
-        style={styles.animation}
-      />
+      {navigation && (
+        <LottieView
+          source={require('../assets/splash10.json')}
+          autoPlay
+          loop={false}
+          onAnimationFinish={() => navigation.navigate('Onboarding')}
+          style={styles.animation}
+        />
+      )}
     </View>
   );
 };
@@ -35,7 +42,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
- 
 });
 
 export default SplashScreen;

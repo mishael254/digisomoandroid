@@ -68,11 +68,9 @@ export default class App extends React.Component {
         <NavigationContainer>
           <GalioProvider theme={nowTheme}>
             <Block flex>
-              {this.state.showSplash ? (
-                <SplashScreen onAnimationFinish={this._handleSplashAnimationFinish} navigation={this.props.navigation}/>
-              ) : (
+              
                 <Screens />
-              )}
+            
             </Block>
           </GalioProvider>
         </NavigationContainer>

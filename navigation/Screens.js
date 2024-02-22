@@ -243,9 +243,11 @@ export default function OnboardingStack({navigation}) {
         options={{
           headerTransparent: true,
         }}
+        
       >
-        {props => <SplashScreen {...props} navigation={navigation} />} {/* Pass the navigation prop */}
-        </Stack.Screen>
+        {props => <SplashScreen {...props} navigation={navigation} />}
+      </Stack.Screen>
+      
       <Stack.Screen name="Onboarding" component={Onboarding} />
       <Stack.Screen name="App" component={AppStack} />
     </Stack.Navigator>
