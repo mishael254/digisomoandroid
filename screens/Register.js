@@ -37,15 +37,18 @@ class Register extends React.Component {
     category:null,
     latitude:'',
     longitude:'',
-    location:'',
     project:null,
     group:null,
     language:null,
   }
   handleInputChange = (key,value)=> {
-    this.setState({[key]:value});
+    if (key === 'latitude' || key === 'longitude') {
+      // Handle latitude and longitude separately if needed
+      this.setState({ [key]: value });
+    } else {
+      this.setState({ [key]: value, location: `${this.state.longitude} ${this.state.latitude}` });
+    }
   }
-
   handleRegister = () => {
     const userData = {
       firstName: this.state.firstName,
@@ -55,13 +58,16 @@ class Register extends React.Component {
       gender: this.state.gender,
       age: this.state.age,
       occupation: this.state.occupation,
-      // other automatic fields include other fields
-      category: this.state.category, // New field
-      project: this.state.project,   // New field
-      'group': this.state.group,       // New field
-      language: this.state.language   // New field
+      category: this.state.category,
+      latitude: this.state.latitude, // Make sure to include latitude
+      longitude: this.state.longitude, // Make sure to include longitude
+      location: `${this.state.longitude} ${this.state.latitude}`, // Concatenate latitude and longitude
+      project: this.state.project,
+      group: this.state.group,
+      language: this.state.language,
+      
     };
-
+  
     // Save user data locally
     UserDataService.saveUserData(userData)
       .then(() => {
@@ -346,23 +352,6 @@ class Register extends React.Component {
                               style={styles.inputs}
                               value={this.state.longitude}
                               onChangeText={(text) => this.handleInputChange('longitude', text)}
-                              iconContent={
-                                <Icon
-                                  size={16}
-                                  color="#ADB5BD"
-                                  name="edit"
-                                  family="IconNowExtra"
-                                  style={styles.inputIcons}
-                                />
-                              }
-                            />
-                          </Block>
-                          <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                            <Input
-                              placeholder="Location"
-                              style={styles.inputs}
-                              value={this.state.location}
-                              onChangeText={(text) => this.handleInputChange('location', text)}
                               iconContent={
                                 <Icon
                                   size={16}
