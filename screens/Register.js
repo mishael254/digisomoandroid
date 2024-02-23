@@ -37,16 +37,36 @@ class Register extends React.Component {
     category:null,
     latitude:'',
     longitude:'',
+    projects:[],
     project:null,
     group:null,
     language:null,
   }
+  componentDidMount() {
+    this.fetchProjects();
+    //this.fetchGroups();
+    //this.fetchLanguages();
+  }
+  fetchProjects = () => {
+    UserDataService.getProjects()
+      .then((response) => {
+        this.setState({ projects: response });
+      })
+      .catch((error) => {
+        console.error('Error fetching projects:', error);
+      });
+  };
+
   handleInputChange = (key,value)=> {
     if (key === 'latitude' || key === 'longitude') {
       // Handle latitude and longitude separately if needed
       this.setState({ [key]: value });
-    } else {
-      this.setState({ [key]: value, location: `${this.state.longitude} ${this.state.latitude}` });
+    }else if (key === 'project') {
+      this.setState({ project: value });
+    }else {
+      // Use the current values of latitude and longitude from the state
+    const location = `${this.state.longitude} ${this.state.latitude}`;
+    this.setState({ [key]: value, location });
     }
   }
   handleRegister = () => {
@@ -370,11 +390,10 @@ class Register extends React.Component {
                                 value: null,
                               }}
                               onValueChange={(value) => this.handleInputChange('project', value)}
-                              items={[
-                                { label: 'Ukulima True, Subukia', value: 'Ukulima True, Subukia' },
-                                { label: 'Piga Nduru, Nairobi', value: 'Piga Nduru, Nairobi' },
-                                // ... (add more options based on your API response)
-                              ]}
+                              items={this.state.projects.map((project) => ({
+                                label: project.projectName,
+                                value: project.id.toString(),
+                              }))}
                             />
                           </Block>
                           <Block width={width * 0.8} style={styles.inputContainer}>

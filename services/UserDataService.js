@@ -7,6 +7,19 @@ const db = SQLite.openDatabase(
 );
 
 const UserDataService = {
+  //fetching projects lists from the api
+  getProjects: () => {
+    return fetch('https://tathmini.live/api/project/')
+      .then((response) => response.json())
+      .then((data) => {
+        return Promise.resolve(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching projects:', error);
+        return Promise.reject(error);
+      });
+  },
+  //saving user or member data gotten from the register form and auto creating a database
   saveUserData: (userData) => {
     return new Promise((resolve, reject) => {
       const {
