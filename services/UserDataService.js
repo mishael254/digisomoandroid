@@ -71,12 +71,24 @@ const UserDataService = {
   postUserData: (userData) => {
     return NetInfo.fetch().then((state) => {
       if (state.isConnected) {
+        // Extract latitude and longitude from userData
+        const { latitude, longitude, ...postData } = userData;
+
+        // Update group, language, and project with valid PK values
+        postData.group = null; // Replace with the valid PK for the group
+        postData.language = 1; // Replace with the valid PK for the language
+        postData.project = 1; // Replace with the valid PK for the project
+
+        // Add latitude and longitude to postData
+        postData.latitude = latitude;
+        postData.longitude = longitude;
+
         return fetch('https://tathmini.live/api/member/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(userData),
+          body: JSON.stringify(postData),
         })
           .then((response) => response.json())
           .then((data) => {
