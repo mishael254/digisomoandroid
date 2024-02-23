@@ -85,12 +85,12 @@ const UserDataService = {
     return NetInfo.fetch().then((state) => {
       if (state.isConnected) {
         // Extract latitude and longitude from userData
-        const { latitude, longitude, ...postData } = userData;
+        const { latitude, longitude, project, ...postData } = userData;
 
         // Update group, language, and project with valid PK values
         postData.group = null; // Replace with the valid PK for the group
         postData.language = 1; // Replace with the valid PK for the language
-        postData.project = 1; // Replace with the valid PK for the project
+        postData.project = project; // Replace with the valid PK for the project
 
         // Add latitude and longitude to postData
         postData.latitude = latitude;
