@@ -1,29 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Dimensions, ScrollView } from "react-native";
 import { Block, theme, Text } from "galio-framework";
 
 import { Card, Button } from "../components";
-import articles from "../constants/articles";
+
 const { width } = Dimensions.get("screen");
 
 class Home extends React.Component {
-  renderArticles = () => {
+  // Add the following state variable
+  state = {
+    projects: [],
+  };
+
+  // Use the componentDidMount lifecycle method to fetch projects data
+  componentDidMount() {
+    this.fetchProjects();
+  }
+
+  fetchProjects = async () => {
+    try {
+      // Replace "YOUR_PROJECTS_API_URL" with your actual API endpoint
+      const response = await fetch("https://tathmini.live/api/project");
+      const data = await response.json();
+      this.setState({ projects: data });
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  };
+
+  // Modify renderProjects to use projects data
+  renderProjects = () => {
+    const { projects } = this.state;
+
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.articles}
       >
         <Block flex>
-        <Card item={articles[0]} horizontal />
-          <Block flex row>
+          {/* Modify this part to use projects data */}
+          {projects.map((project, index) => (
             <Card
-              item={articles[1]}
-              style={{ marginRight: theme.SIZES.BASE }}
+              key={index}
+              item={{
+                title: project.projectName,
+                image: project.theme, // Use the appropriate property for the image
+                cta: 'View project', // You can customize the CTA text
+                description: `Category: ${project.levelThreeCategory}`,
+              }}
+              horizontal
             />
-            <Card item={articles[2]} />
-          </Block>
-          <Card item={articles[3]} horizontal />
-          <Card item={articles[4]} full />
+          ))}
         </Block>
       </ScrollView>
     );
@@ -32,7 +59,7 @@ class Home extends React.Component {
   render() {
     return (
       <Block flex center style={styles.home}>
-        {this.renderArticles()}
+        {this.renderProjects()}
       </Block>
     );
   }
@@ -40,15 +67,14 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   home: {
-    width: width
+    width: width,
   },
   articles: {
     width: width - theme.SIZES.BASE * 2,
     paddingVertical: theme.SIZES.BASE,
     paddingHorizontal: 2,
-    fontFamily: 'montserrat-regular'
-
-  }
+    fontFamily: "montserrat-regular",
+  },
 });
 
 export default Home;
